@@ -15,7 +15,7 @@ export default function CountriesList({ cities, isLoading }) {
 
   //
   const countries = cities.reduce((initialArray, cityObject) => {
-    if (!initialArray.map((el) => el.city).includes(cityObject.country))
+    if (!initialArray.map((el) => el.country).includes(cityObject.country))
       return [
         ...initialArray,
         { country: cityObject.country, emoji: cityObject.emoji },
