@@ -10,10 +10,14 @@ const formatDate = (date) =>
 
 export default function CityItem({ city }) {
   const { cityName, emoji, date, id, position } = city;
+
   return (
     <li>
       <Link
-        to={`${id}?lat=${position.lat}?lng=${position.lng}`}
+        // to={`${id}?lat=${position.lat}&lng=${position.lng}`}
+        to={`${id}?lat=${encodeURIComponent(
+          position.lat
+        )}&lng=${encodeURIComponent(position.lng)}`}
         className={`${styles.cityItem} `}
       >
         <span className={styles.emoji}>{emoji}</span>
