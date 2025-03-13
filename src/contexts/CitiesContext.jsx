@@ -53,7 +53,9 @@ function CitiesProvider({ children }) {
   useEffect(() => {
     async function fetchCities() {
       try {
-        if (citiesobj) {
+        if (localStorage.getItem("cities")) {
+          setCities(JSON.parse(localStorage.getItem("cities")));
+        } else if (citiesobj) {
           setCities(citiesobj.cities);
         } else {
           setIsLoading(true);

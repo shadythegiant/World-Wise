@@ -9,7 +9,9 @@ import { useUrlPosition } from "../hooks/useUrlPosition";
 import Message from "./Message";
 import Spinner from "./Spinner";
 import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css"
+import "react-datepicker/dist/react-datepicker.css";
+import { useCities } from "../contexts/CitiesContext";
+import { citiesobj } from "../contexts/CitiesContext";
 
 export function convertToEmoji(countryCode) {
   const codePoints = countryCode
@@ -34,7 +36,7 @@ function Form() {
   const [lat, lng] = useUrlPosition();
 
   useEffect(() => {
-    if(!lat && !lng) return; 
+    if (!lat && !lng) return;
     async function fetchCityData() {
       try {
         setIsLoadingGeoLocation(true);
@@ -53,7 +55,7 @@ function Form() {
         setCountry(data.countryName);
         setEmoji(convertToEmoji(data.countryCode));
         setGeoCodingError("");
-        console.log(data);
+        // console.log(data);
       } catch (err) {
         setGeoCodingError(err.message);
       } finally {
@@ -64,11 +66,27 @@ function Form() {
     fetchCityData();
   }, [lat, lng]);
 
-  // handle the form submit event 
+  // handle the form submit event
 
   function handleSubmit(e) {
-    e.preventDefault(); 
-    
+    e.preventDefault();
+
+    if (!cityName || !date) return;
+
+    const newCity = {
+      cityName,
+      country,
+      emoji,
+      date,
+      notes,
+      position: { lat, lng },
+      id: Math.floor(Math.random() * 10000),
+    };
+    citiesobj.cities.push(newCity);
+    localStorage.setItem(
+      "cities",
+      JSON.stringify([...citiesobj.cities, newCity])
+    );
   }
 
   //
@@ -77,7 +95,8 @@ function Form() {
 
   //
 
-  if(!lat && !lng ) return <Message message='start with clicking somewhere in the map '/>
+  if (!lat && !lng)
+    return <Message message="start with clicking somewhere in the map " />;
 
   //
 
@@ -102,7 +121,7 @@ function Form() {
           onChange={(e) => setDate(e.target.value)}
           value={date}
         /> */}
-        <DatePicker onChange={(date) => setDate(date)} selected={date}/>
+        <DatePicker onChange={(date) => setDate(date)} selected={date} />
       </div>
 
       <div className={styles.row}>
